@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axiosWithAuth from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
 
 import Article from './Article';
 import EditForm from './EditForm';
+import axios from 'axios';
 
 const View = (props) => {
     const [articles, setArticles] = useState([]);
     const [editing, setEditing] = useState(false);
     const [editId, setEditId] = useState();
     const { push } = useHistory();
+
+    useEffect(() => {
+        axiosWithAuth()
+        .get('http://localhost:5000/api/articles')
+        .then(resp=> {
+            setArticles(resp.data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }, [])
 
     const handleDelete = (id) => {
         axiosWithAuth()
