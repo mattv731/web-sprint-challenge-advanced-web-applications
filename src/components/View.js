@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 
 import Article from './Article';
 import EditForm from './EditForm';
-import axios from 'axios';
 
 const View = (props) => {
     const [articles, setArticles] = useState([]);
@@ -13,9 +12,11 @@ const View = (props) => {
     const [editId, setEditId] = useState();
     const { push } = useHistory();
 
+
+    //I'm setting state when this page first renders
     useEffect(() => {
         axiosWithAuth()
-        .get('http://localhost:5000/api/articles')
+        .get('/articles')
         .then(resp=> {
             setArticles(resp.data)
         })
@@ -24,13 +25,14 @@ const View = (props) => {
         })
     }, [])
 
+    // This function goes through and both updates state as well as updates the database
     const handleDelete = (id) => {
         axiosWithAuth()
         .delete(`/articles/${id}`)
         .then(resp => {
             console.log(resp)
             setArticles(articles.filter(article=>(article.id !== id)));
-            push('/articles')
+            push('/view')
         })
         .catch(err => {
             alert(err)
@@ -38,6 +40,16 @@ const View = (props) => {
     }
 
     const handleEdit = (article) => {
+        axiosWithAuth()
+        .put(`/articles/${article.id}`, article)
+        .then(resp => {
+            setArticles(resp.data)
+            setEditing(false)
+            console.log(article)
+        })
+        .catch(err =>{
+            console.log(err)
+        })
     }
 
     const handleEditSelect = (id)=> {
