@@ -10,6 +10,7 @@ const Login = () => {
             password: ''
         }
     });
+    const [error, setError] = useState('')
 
     const { push } = useHistory();
     
@@ -33,9 +34,10 @@ const Login = () => {
             push('/view')
         })
         .catch(err => {
-            alert(err)
+            setError(err)
         })
     }
+
 
     return(<ComponentContainer>
         <ModalContainer>
@@ -59,7 +61,7 @@ const Login = () => {
                 />
                 <button id="submit" onClick={handleSubmit}>Login</button>
             </form>
-            <p id="error"></p>
+            { error ? <p id="error">please check the username and password</p> : null }
         </ModalContainer>
     </ComponentContainer>);
 }
