@@ -44,6 +44,7 @@ const resetArticles = () => {
 }
 
 resetArticles()
+export default resetArticles
 
 const getAll = () => {
   return articles
